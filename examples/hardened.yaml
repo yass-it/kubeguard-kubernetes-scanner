@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-api
+  namespace: payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-api
+  template:
+    metadata:
+      labels:
+        app: sample-api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: api
+          image: nginx:1.27
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false

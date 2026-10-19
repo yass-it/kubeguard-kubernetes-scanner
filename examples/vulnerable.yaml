@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-privileged-pod
+  namespace: payments
+spec:
+  hostNetwork: true
+  volumes:
+    - name: host-logs
+      hostPath:
+        path: /var/log
+  containers:
+    - name: api
+      image: nginx:latest
+      securityContext:
+        privileged: true
+        allowPrivilegeEscalation: true
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: demo-wide-access
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["impersonate"]
